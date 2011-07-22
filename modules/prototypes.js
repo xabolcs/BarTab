@@ -542,6 +542,9 @@ BarTabWebNavigation.prototype = {
 
   /*** These methods and properties are simply passed through. ***/
 
+  setCurrentURI: function (aURI) {
+    return this._original.setCurrentURI(aURI);
+  },
   goBack: function () {
     return this._original.goBack();
   },
@@ -686,7 +689,7 @@ BarTabWebProgressListener.prototype = {
     let flags = Ci.nsIWebNavigation.LOAD_FLAGS_NONE;
     let window = this._tab.ownerDocument.defaultView;
     window.setTimeout(function () {
-      browser.webNavigation._pauseLoadURI(
+      browser.webNavigation.loadURI(
         uri.spec, flags, referrer, postData, null);
     }, 0);
   },
