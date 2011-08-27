@@ -323,12 +323,12 @@ BarTabHandler.prototype = {
     while ((aTab._tPos - i >= 0) ||
          (aTab._tPos + i < tabbrowser.mTabs.length)) {
       if (aTab._tPos + i < tabbrowser.mTabs.length) {
-        if (tabbrowser.mTabs[aTab._tPos+i].getAttribute("ontab") != "true") {
+        if (tabbrowser.mTabs[aTab._tPos+i].getAttribute("ontab") != "true" && tabbrowser.mTabs[aTab._tPos+i].getAttribute("linkedpanel") == aTab.selectedPanel) {
           return tabbrowser.mTabs[aTab._tPos+i];
         }
       }
       if (aTab._tPos - i >= 0) {
-        if (tabbrowser.mTabs[aTab._tPos-i].getAttribute("ontab") != "true") {
+        if (tabbrowser.mTabs[aTab._tPos-i].getAttribute("ontab") != "true" && tabbrowser.mTabs[aTab._tPos-i].getAttribute("linkedpanel") == aTab.selectedPanel ) {
           return tabbrowser.mTabs[aTab._tPos-i];
         }
       }
@@ -542,6 +542,9 @@ BarTabWebNavigation.prototype = {
 
   /*** These methods and properties are simply passed through. ***/
 
+  setCurrentURI: function (aURI) {
+    return this._original.setCurrentURI(aURI);
+  },
   goBack: function () {
     return this._original.goBack();
   },
@@ -658,6 +661,16 @@ BarTabWebProgressListener.prototype = {
       browser.webNavigation.unhook();
       return;
     }
+    
+   // Panorama switch
+    if (this._tab._tabViewTabItem &&
+        this._tab._tabViewTabItem.parent &&
+        this._tab._tabViewTabItem.parent._activeTab.tab &&
+        this._tab._tabViewTabItem.parent._activeTab.tab == this._tab
+      ) {
+      this._tab.removeAttribute("ontab");
+      return;
+    }    
 
     // If it's an HTTP request, we want to set the right referrer.
     // And if it's a POST request on top of that, we want to make
