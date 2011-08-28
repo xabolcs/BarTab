@@ -661,6 +661,16 @@ BarTabWebProgressListener.prototype = {
       browser.webNavigation.unhook();
       return;
     }
+    
+   // Panorama switch
+    if (this._tab._tabViewTabItem &&
+        this._tab._tabViewTabItem.parent &&
+        this._tab._tabViewTabItem.parent._activeTab.tab &&
+        this._tab._tabViewTabItem.parent._activeTab.tab == this._tab
+      ) {
+      this._tab.removeAttribute("ontab");
+      return;
+    }    
 
     // If it's an HTTP request, we want to set the right referrer.
     // And if it's a POST request on top of that, we want to make
