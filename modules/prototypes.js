@@ -689,7 +689,7 @@ BarTabWebProgressListener.prototype = {
     let flags = Ci.nsIWebNavigation.LOAD_FLAGS_NONE;
     let window = this._tab.ownerDocument.defaultView;
     window.setTimeout(function () {
-      browser.webNavigation.loadURI(
+      browser.webNavigation._pauseLoadURI(
         uri.spec, flags, referrer, postData, null);
     }, 0);
   },
